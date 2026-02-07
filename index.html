@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Team Selector</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <main class="app">
+    <header class="app__header">
+      <p class="app__eyebrow">Valorant / cualquier juego de 5</p>
+      <h1>Random Team Selector</h1>
+      <p class="app__subtitle">Agregá jugadores, elegí el tamaño del team y generá equipos al azar.</p>
+    </header>
+
+    <section class="panel">
+      <div class="panel__input">
+        <label for="player-name">Nombre del jugador</label>
+        <div class="input-row">
+          <input id="player-name" type="text" placeholder="Ej: Juan" autocomplete="off" />
+          <button id="add-player" class="btn btn--ghost">Agregar</button>
+        </div>
+        <p class="helper">Tip: podés agregar varios nombres separados por coma.</p>
+      </div>
+
+      <div class="panel__list">
+        <div class="panel__list-header">
+          <h2>Jugadores</h2>
+          <span id="players-count" class="badge">0</span>
+        </div>
+        <ul id="players-list" class="players"></ul>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="controls__select">
+        <label for="team-size">Cantidad de players</label>
+        <select id="team-size">
+          <option value="2">2 PLAYERS</option>
+          <option value="3">3 PLAYERS</option>
+          <option value="5" selected>5 PLAYERS</option>
+        </select>
+      </div>
+      <button id="generate" class="btn btn--primary">Generar equipos</button>
+    </section>
+
+    <section class="result">
+      <div class="result__header">
+        <h2>Resultados</h2>
+        <span id="status" class="status">Listo para generar</span>
+      </div>
+      <div class="result__grid">
+        <div class="card">
+          <h3>Team</h3>
+          <ul id="team-list" class="result-list"></ul>
+        </div>
+        <div class="card">
+          <h3>Espectean este game</h3>
+          <ul id="spectators-list" class="result-list"></ul>
+        </div>
+      </div>
+      <p id="error" class="error" hidden></p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
