@@ -9,6 +9,12 @@ const spectatorsList = document.querySelector("#spectators-list");
 const statusLabel = document.querySelector("#status");
 const errorLabel = document.querySelector("#error");
 
+const STORAGE_KEYS = {
+  players: "random-team-players",
+  result: "random-team-result",
+  teamSize: "random-team-size",
+};
+
 let players = [];
 let isGenerating = false;
 
@@ -34,6 +40,7 @@ const updatePlayersView = () => {
   });
 
   playersCount.textContent = players.length;
+  savePlayers();
 };
 
 const renderResult = (team, spectators) => {
@@ -51,6 +58,11 @@ const renderResult = (team, spectators) => {
     item.textContent = name;
     spectatorsList.appendChild(item);
   });
+
+  localStorage.setItem(
+    STORAGE_KEYS.result,
+    JSON.stringify({ team, spectators })
+  );
 };
 
 const showError = (message) => {
@@ -101,6 +113,39 @@ const setGeneratingState = (state) => {
     : "Listo para generar";
 };
 
+const savePlayers = () => {
+  localStorage.setItem(STORAGE_KEYS.players, JSON.stringify(players));
+};
+
+const loadPlayers = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.players));
+    if (Array.isArray(saved)) {
+      players = saved;
+    }
+  } catch (error) {
+    players = [];
+  }
+};
+
+const loadResult = () => {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.result));
+    if (saved?.team && saved?.spectators) {
+      renderResult(saved.team, saved.spectators);
+    }
+  } catch (error) {
+    renderResult([], []);
+  }
+};
+
+const loadTeamSize = () => {
+  const saved = Number(localStorage.getItem(STORAGE_KEYS.teamSize));
+  if ([2, 3, 5].includes(saved)) {
+    teamSizeSelect.value = String(saved);
+  }
+};
+
 const generateTeams = () => {
   clearError();
   const teamSize = Number(teamSizeSelect.value);
@@ -136,5 +181,11 @@ playerInput.addEventListener("keydown", (event) => {
 });
 
 generateBtn.addEventListener("click", generateTeams);
+teamSizeSelect.addEventListener("change", () => {
+  localStorage.setItem(STORAGE_KEYS.teamSize, teamSizeSelect.value);
+});
 
+loadPlayers();
+loadTeamSize();
 updatePlayersView();
+loadResult();
